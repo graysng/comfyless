@@ -1,0 +1,68 @@
+version: '3.7'
+
+services:
+  # ComfyUI Serverless main service
+  comfyless:
+    image: novitalabs/comfyless:latest
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      # Basic configuration (based on internal/config/config.go)
+      - PORT=8080
+      
+      # Redis configuration
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - REDIS_DB=0
+      
+      # Worker configuration
+      - WORKER_MANAGER=${WORKER_MANAGER:-docker}
+      - IMAGE=${IMAGE:-novitalabs/comfyui:flux1-dev-fp8v5}
+      - MIN_WORKERS=${MIN_WORKERS:-1}
+      - MAX_WORKERS=${MAX_WORKERS:-10}
+      - IDLE_TIMEOUT=${IDLE_TIMEOUT:-60}
+      - SCALE_UP_COOLDOWN=${SCALE_UP_COOLDOWN:-60}
+      - PORT_RANGE_START=${PORT_RANGE_START:-8188}
+      - PORT_RANGE_END=${PORT_RANGE_END:-8288}
+      
+      # Novita configuration (only used when WORKER_MANAGER=novita)
+      - NOVITA_API_KEY=${NOVITA_API_KEY}
+      - NOVITA_BASE_URL=${NOVITA_BASE_URL:-https://api.novita.ai}
+      - NOVITA_PRODUCT_ID=${NOVITA_PRODUCT_ID}
+      - NOVITA_IMAGE_URL=${NOVITA_IMAGE_URL}
+      - NOVITA_GPU_NUM=${NOVITA_GPU_NUM:-1}
+      - NOVITA_ROOTFS_SIZE=${NOVITA_ROOTFS_SIZE:-50}
+      - NOVITA_TIMEOUT=${NOVITA_TIMEOUT:-1800}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock  # Docker socket
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+  # Redis service
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+    command: >
+      sh -c "
+        if [ -n \"$$REDIS_PASSWORD\" ]; then
+          redis-server --requirepass $$REDIS_PASSWORD
+        else
+          redis-server
+        fi
+      "
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+
+volumes:
+  # Redis data
+  redis-data:
+    driver: local

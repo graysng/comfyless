@@ -1,0 +1,77 @@
+# Go build artifacts
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+bin/
+build/
+
+# Go test artifacts
+*.test
+*.out
+coverage.txt
+
+
+# IDE configuration files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# System files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Log files
+*.log
+logs/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+
+# Configuration files (may contain sensitive information)
+*.env
+!env.example
+!quickstart.env
+!development.env
+!production.env
+config/local.yaml
+config/local.json
+
+# Docker related
+.dockerignore
+
+# Data files
+data/
+*.db
+*.sqlite
+*.sqlite3
+
+# Backup files
+*.bak
+*.backup
+
+# Compressed files
+*.tar.gz
+*.zip
+*.rar
+
+# Runtime files
+*.pid
+*.sock
+
+# Coverage reports
+coverage.html
+
+# Air live reload tool
+tmp/

@@ -1,0 +1,31 @@
+{
+  "port": 8080,
+  "redis": {
+    "host": "localhost",
+    "port": 6379,
+    "password": "",
+    "db": 0
+  },
+  "worker": {
+    "image": "novitalabs/comfyui:flux1-dev-fp8v5",
+    "max_workers": 10,
+    "min_workers": 1,
+    "idle_timeout": "300s",
+    "scale_up_cooldown": "60s",
+    "port_range": {
+      "start": 8188,
+      "end": 8288
+    }
+  },
+  "novita": {
+    "api_key": "",
+    "base_url": "https://api.novita.ai",
+    "product_id": "",
+    "image_url": "",
+    "gpu_num": 1,
+    "rootfs_size": 50,
+    "min_workers": 1,
+    "max_workers": 10,
+    "idle_timeout": "600s"
+  }
+} 
